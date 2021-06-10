@@ -4,10 +4,13 @@ void main() {
   runApp(AppWidget());
 }
 
+var count = 0;
+
 class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Ignite - Trilha Flutter',
       home: HomePage(),
       theme: ThemeData(
@@ -20,6 +23,15 @@ class AppWidget extends StatelessWidget {
   }
 }
 
+//AppBar
+AppBar headerNav() {
+  return AppBar(
+    title: Text('Desafio 01 - Estrutura da aplicação'),
+    centerTitle: false,
+  );
+}
+
+//Home Page
 class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -28,34 +40,35 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  var count = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Ignite - Trilha Flutter'),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Align(
-          alignment: Alignment.center,
-          child: Text(
-            'Contagem de toques do botão: \n$count',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-            ),
-          ),
-        ),
-      ),
+      appBar: headerNav(),
+      body: BodyText(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           count = count + 1;
           setState(() {});
         },
         child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+//Body Text
+class BodyText extends StatelessWidget {
+  const BodyText({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        'Contagem de toques no botão: $count',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 19,
+        ),
       ),
     );
   }
