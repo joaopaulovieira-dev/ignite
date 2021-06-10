@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes/create_note_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -8,32 +9,35 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var count = 0;
+  var notes = <String>['Item 0'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Notes'),
-        centerTitle: false,
+        centerTitle: true,
       ),
-      body: Column(
-        children: [
-          for (var i = 0; i < count; i++)
-            Card(
-              child: ListTile(
-                title: Text('Nota adicionada', style: TextStyle()),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            for (var i = 0; i < notes.length; i++)
+              Card(
+                child: ListTile(
+                  title: Text(notes[i]),
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {
-          setState(
-            () {
-              count = count + 1;
-            },
+        onPressed: () async {
+          final description = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateNotePages(),
+            ),
           );
         },
       ),
