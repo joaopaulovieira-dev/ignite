@@ -9,39 +9,70 @@ class CreateNotePages extends StatefulWidget {
 
 class _CreateNotePagesState extends State<CreateNotePages> {
   var description = '';
+  var textcontroller = TextEditingController();
+  var isEdit = false;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) {
+        if (ModalRoute.of(context)!.settings.arguments != null) {
+          description = ModalRoute.of(context)!.settings.arguments as String;
+          textcontroller.text = description;
+          isEdit = true;
+          setState(() {});
+        }
+      },
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Note'),
+        title: Text(isEdit ? 'Edit Note' : 'Create Note'),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.delete),
-          )
+          if (isEdit)
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context, '');
+              },
+              icon: Icon(Icons.delete),
+            )
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(32.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
+              controller: textcontroller,
               maxLines: null,
               maxLength: 400,
               onChanged: (value) {
                 description = value;
                 setState(() {});
               },
+              decoration: InputDecoration(labelText: 'Descrição'),
+            ),
+            SizedBox(
+              height: 12,
             ),
             if (description.isNotEmpty)
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context, description);
-                },
-                child: Text('Salvar'),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context, description);
+                      },
+                      child: Text(isEdit ? 'Editar' : 'Salvar'),
+                    ),
+                  ),
+                ],
               ),
           ],
         ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:notes/create_note_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,6 +24,21 @@ class _HomePageState extends State<HomePage> {
               Card(
                 child: ListTile(
                   title: Text(notes[i]),
+                  onTap: () async {
+                    var response = await Navigator.pushNamed(
+                        context, '/create-note',
+                        arguments: notes[i]);
+                    if (response != null) {
+                      var description = response as String;
+                      if (response.isEmpty) {
+                        notes.removeAt(i);
+                      } else {
+                        notes[i] = description;
+                      }
+
+                      setState(() {});
+                    }
+                  },
                 ),
               ),
           ],
@@ -33,12 +47,11 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
-          final description = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CreateNotePages(),
-            ),
-          );
+          var description = await Navigator.pushNamed(context, '/create-note');
+          if (description != null) {
+            notes.add(description as String);
+            setState(() {});
+          }
         },
       ),
     );
